@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trắc Nghiệm Tin Học</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Add favicon -->
+    <link
+      rel="icon"
+      href="https://cdn-icons-png.flaticon.com/512/2641/2641409.png"
+      type="image/png"
+    />
+    <!-- Meta description for better SEO -->
+    <meta
+      name="description"
+      content="Ứng dụng trắc nghiệm tin học với nhiều module khác nhau. Hỗ trợ lưu tiến trình làm bài."
+    />
+    <!-- Add utils.js before the main script -->
+    <script src="utils.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1><i class="fas fa-laptop-code"></i> CHUẨN ĐẦU RA TIN HỌC HUMG</h1>
+      </header>
+
+      <div id="module-selection" class="section">
+        <h2>Chọn Module</h2>
+        <div class="module-grid">
+          <div class="module-card" data-module="module1" style="border: none">
+            <i class="fas fa-microchip"></i>
+            <span>Module 1</span>
+            <p>Kiến thức cơ bản về máy tính</p>
+          </div>
+          <div class="module-card" data-module="module2" style="border: none">
+            <i class="fas fa-desktop"></i>
+            <span>Module 2</span>
+            <p>Sử dụng hệ điều hành Windows</p>
+          </div>
+          <div class="module-card" data-module="module3" style="border: none">
+            <i class="fas fa-file-word"></i>
+            <span>Module 3</span>
+            <p>Xử lý văn bản</p>
+          </div>
+          <div class="module-card" data-module="module4" style="border: none">
+            <i class="fas fa-file-excel"></i>
+            <span>Module 4</span>
+            <p>Bảng tính</p>
+          </div>
+          <div class="module-card" data-module="module5" style="border: none">
+            <i class="fas fa-file-powerpoint"></i>
+            <span>Module 5</span>
+            <p>Trình chiếu</p>
+          </div>
+          <div class="module-card" data-module="module6" style="border: none">
+            <i class="fas fa-globe"></i>
+            <span>Module 6</span>
+            <p>Internet & Email</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-section" class="section hidden">
+        <div class="quiz-layout">
+          <div class="quiz-main-content">
+            <div id="quiz-header">
+              <div class="header-top">
+                <h2 id="module-title">Module 1</h2>
+                <div id="score">Điểm: <span id="score-value">0</span></div>
+              </div>
+              <div class="header-bottom">
+                <div id="progress-container">
+                  <div id="progress-bar">
+                    <div id="progress-fill"></div>
+                  </div>
+                  <div id="progress-text">
+                    <span id="current-question">1</span>/<span
+                      id="total-questions"
+                      >20</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="question-container"></div>
+
+            <div id="pagination">
+              <button id="prev-page" class="btn" title="Phím tắt: Mũi tên trái">
+                <i class="fas fa-chevron-left"></i> Trang Trước
+              </button>
+              <span id="page-info"
+                >Trang <span id="current-page">1</span>/<span id="total-pages"
+                  >5</span
+                ></span
+              >
+              <button id="next-page" class="btn" title="Phím tắt: Mũi tên phải">
+                Trang Sau <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+
+            <div class="saved-progress-info">
+              <i class="fas fa-save"></i> Tiến trình làm bài được tự động lưu
+            </div>
+
+            <!-- Results Summary Section -->
+            <div id="results-summary" class="hidden">
+              <h3>Kết Quả Bài Làm</h3>
+              <div class="results-container">
+                <div class="result-item">
+                  <div class="result-label">Tổng số câu hỏi:</div>
+                  <div class="result-value" id="total-result-questions">0</div>
+                </div>
+                <div class="result-item">
+                  <div class="result-label">Số câu đã trả lời:</div>
+                  <div class="result-value" id="answered-questions">0</div>
+                </div>
+                <div class="result-item">
+                  <div class="result-label">Số câu trả lời đúng:</div>
+                  <div class="result-value" id="correct-answers">0</div>
+                </div>
+                <div class="result-item">
+                  <div class="result-label">Tỷ lệ đúng:</div>
+                  <div class="result-value" id="accuracy-rate">0%</div>
+                </div>
+              </div>
+              <div class="results-actions">
+                <button id="hide-results-btn" class="btn secondary-btn">
+                  <i class="fas fa-times"></i> Đóng
+                </button>
+                <button
+                  id="export-results-btn"
+                  class="btn"
+                  onclick="window.exportResults()"
+                >
+                  <i class="fas fa-file-export"></i> Xuất Kết Quả
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- New sidebar for controls -->
+          <div class="quiz-sidebar">
+            <div class="sidebar-controls">
+              <div id="quiz-controls">
+                <button id="restart-quiz" class="btn" title="Phím tắt: Ctrl+R">
+                  <i class="fas fa-redo"></i> Làm Lại
+                </button>
+                <button id="reset-progress" class="btn danger-btn">
+                  <i class="fas fa-trash-alt"></i> Xóa Tiến Trình
+                </button>
+                <button
+                  id="back-to-modules"
+                  class="btn secondary-btn"
+                  title="Phím tắt: Esc"
+                >
+                  <i class="fas fa-th-large"></i> Chọn Module Khác
+                </button>
+                <button id="show-results-btn" class="btn">
+                  <i class="fas fa-chart-bar"></i> Xem Kết Quả
+                </button>
+              </div>
+
+              <div class="keyboard-shortcuts-info">
+                <button id="shortcuts-info-btn" class="btn-link">
+                  <i class="fas fa-keyboard"></i> Xem phím tắt
+                </button>
+                <div id="shortcuts-panel" class="hidden">
+                  <h3>Phím tắt hữu ích</h3>
+                  <ul>
+                    <li><kbd>←</kbd> Trang trước</li>
+                    <li><kbd>→</kbd> Trang sau</li>
+                    <li><kbd>Esc</kbd> Quay lại chọn module</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>R</kbd> Làm lại bài</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>S</kbd> Xem kết quả</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Trắc Nghiệm Tin Học</p>
+      <p><b>Design by PinkD</b></p>
+    </footer>
+
+    <script src="utils.js"></script>
+    <script src="script.js"></script>
+    <script>
+      document
+        .getElementById("show-results-btn")
+        .addEventListener("click", function () {
+          document.getElementById("results-summary").classList.remove("hidden");
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+  </body>
+</html>

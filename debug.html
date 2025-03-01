@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debug - Trắc Nghiệm Tin Học</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      pre {
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 5px;
+        overflow: auto;
+      }
+      .error {
+        color: red;
+      }
+      .success {
+        color: green;
+      }
+      button {
+        padding: 8px 16px;
+        background-color: #4361ee;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background-color: #3f37c9;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Debug Tool for Trắc Nghiệm Tin Học</h1>
+
+    <div>
+      <h2>File Check</h2>
+      <button id="check-files">Check Required Files</button>
+      <div id="file-results"></div>
+    </div>
+
+    <div>
+      <h2>Quiz Data</h2>
+      <button id="load-data">Load Quiz Data</button>
+      <div id="data-results"></div>
+    </div>
+
+    <div>
+      <h2>Module Cards</h2>
+      <button id="check-modules">Check Module Cards</button>
+      <div id="module-results"></div>
+    </div>
+
+    <div>
+      <h2>Event Listener Test</h2>
+      <button id="test-listener">Test Module Click</button>
+      <div id="listener-results"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const fileResultsDiv = document.getElementById("file-results");
+        const dataResultsDiv = document.getElementById("data-results");
+        const moduleResultsDiv = document.getElementById("module-results");
+        const listenerResultsDiv = document.getElementById("listener-results");
+
+        // Check required files
+        document
+          .getElementById("check-files")
+          .addEventListener("click", async () => {
+            fileResultsDiv.innerHTML = "";
+            const files = [
+              "index.html",
+              "script.js",
+              "styles.css",
+              "questions.json",
+            ];
+            let results = "<ul>";
+
+            for (const file of files) {
+              try {
+                const response = await fetch(file, { method: "HEAD" });
+                if (response.ok) {
+                  results += `<li class="success">${file} - Found</li>`;
+                } else {
+                  results += `<li class="error">${file} - Not Found (Status: ${response.status})</li>`;
+                }
+              } catch (err) {
+                results += `<li class="error">${file} - Error: ${err.message}</li>`;
+              }
+            }
+
+            results += "</ul>";
+            fileResultsDiv.innerHTML = results;
+          });
+
+        // Load quiz data
+        document
+          .getElementById("load-data")
+          .addEventListener("click", async () => {
+            dataResultsDiv.innerHTML = "Loading...";
+            try {
+              const response = await fetch("questions.json");
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              const data = await response.json();
+              const modules = Object.keys(data);
+
+              let html = `<div class="success">Quiz data loaded successfully. Found ${modules.length} modules:</div><ul>`;
+              modules.forEach((module) => {
+                const questions = data[module].length;
+                html += `<li>${module}: ${questions} questions</li>`;
+              });
+              html += "</ul>";
+
+              dataResultsDiv.innerHTML = html;
+            } catch (error) {
+              dataResultsDiv.innerHTML = `<div class="error">Error loading quiz data: ${error.message}</div>`;
+            }
+          });
+
+        // Check module cards
+        document
+          .getElementById("check-modules")
+          .addEventListener("click", () => {
+            fetch("index.html")
+              .then((response) => response.text())
+              .then((html) => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, "text/html");
+                const moduleCards = doc.querySelectorAll(".module-card");
+
+                let results = `<div>Found ${moduleCards.length} module cards:</div><ul>`;
+                moduleCards.forEach((card) => {
+                  const module = card.getAttribute("data-module");
+                  const isDisabled = card.classList.contains("disabled");
+                  results += `<li>${module} - ${
+                    isDisabled ? "Disabled" : "Enabled"
+                  }</li>`;
+                });
+                results += "</ul>";
+
+                moduleResultsDiv.innerHTML = results;
+              })
+              .catch((error) => {
+                moduleResultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+              });
+          });
+
+        // Test module click
+        document
+          .getElementById("test-listener")
+          .addEventListener("click", () => {
+            listenerResultsDiv.innerHTML = "Testing...";
+
+            // Create a simple test to simulate the module cards
+            const testDiv = document.createElement("div");
+            testDiv.innerHTML = `
+                    <div class="module-card" data-module="test-module">Test Module</div>
+                `;
+            document.body.appendChild(testDiv);
+
+            const testCard = testDiv.querySelector(".module-card");
+            let clicked = false;
+
+            testCard.addEventListener("click", (event) => {
+              clicked = true;
+              listenerResultsDiv.innerHTML +=
+                '<div class="success">Click event triggered successfully!</div>';
+            });
+
+            // Simulate a click
+            testCard.click();
+
+            // Check if the click was registered
+            if (!clicked) {
+              listenerResultsDiv.innerHTML =
+                '<div class="error">Click event not triggered. There may be an issue with event listeners.</div>';
+            }
+
+            // Clean up
+            document.body.removeChild(testDiv);
+          });
+      });
+    </script>
+  </body>
+</html>

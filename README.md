@@ -4,7 +4,7 @@
 
 ## Tính năng
 
-- Hỗ trợ nhiều module bài thi khác nhau
+- Hỗ trợ nhiều module bài thi khác nhau (hiện có Module 1 và Module 2)
 - Giao diện hiện đại, thân thiện với người dùng
 - Tương thích với các thiết bị di động
 - Tự động lưu tiến trình làm bài
@@ -49,5 +49,3 @@
 ## Mở rộng
 
 Để thêm các module mới, hãy cập nhật tệp questions.json với cấu trúc tương tự như các module hiện có.
-
-## Được thiết kế và phát triển bởi PinkD

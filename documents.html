@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tài Liệu Học Tập - Trắc Nghiệm Tin Học</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/document-viewer.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Add favicon -->
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2641/2641409.png" type="image/png" />
+  <!-- Meta description for better SEO -->
+  <meta name="description" content="Xem và tải xuống tài liệu học tập cho các module trắc nghiệm tin học." />
+  <!-- Add utils.js -->
+  <script src="js/utils.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-book"></i> TÀI LIỆU HỌC TẬP</h1>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link-doc"><i class="fas fa-home"></i> Trang Chủ</a>
+       </nav>
+    </header>
+
+    <div class="section">
+      <div class="document-container">
+        <button id="toggle-sidebar" class="toggle-sidebar-btn" title="Ẩn/hiện danh mục">
+          <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="document-sidebar">
+          <h2><i class="fas fa-folder-open"></i> Danh Mục Tài Liệu</h2>
+          
+          <div class="document-categories">
+            <div class="category-tab active" data-category="word">
+              <i class="fas fa-file-word"></i> Word
+            </div>
+            <div class="category-tab" data-category="excel">
+              <i class="fas fa-file-excel"></i> Excel
+            </div>
+            <div class="category-tab" data-category="powerpoint">
+              <i class="fas fa-file-powerpoint"></i> PowerPoint
+            </div>
+          </div>
+          
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" id="document-search" placeholder="Tìm kiếm tài liệu..." class="search-input">
+              <button class="search-clear" id="clear-search"><i class="fas fa-times"></i></button>
+            </div>
+          </div>
+          
+          <div class="document-lists">
+            <div id="word-documents" class="document-list active"></div>
+            <div id="excel-documents" class="document-list"></div>
+            <div id="powerpoint-documents" class="document-list"></div>
+          </div>
+        </div>
+        
+        <div class="pdf-view-container">
+          <div class="pdf-toolbar">
+            <div class="pdf-info">
+              <span id="current-document-title">Chưa chọn tài liệu</span>
+            </div>
+            
+            <div class="pdf-controls">
+              <div class="page-navigation">
+                <button id="prev-page" class="toolbar-button" disabled>
+                  <i class="fas fa-chevron-left"></i> Trang trước
+                </button>
+                
+                <div id="page-info">
+                  Trang <span id="current-page">0</span> / <span id="total-pages">0</span>
+                </div>
+                
+                <button id="next-page" class="toolbar-button" disabled>
+                  Trang sau <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              
+              <div class="zoom-controls">
+                <button id="zoom-out" class="toolbar-button" disabled>
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <span id="zoom-value">100%</span>
+                <button id="zoom-in" class="toolbar-button" disabled>
+                  <i class="fas fa-search-plus"></i>
+                </button>
+              </div>
+              
+              <button id="fullscreen" class="toolbar-button" disabled title="Toàn màn hình">
+                <i class="fas fa-expand-alt"></i>
+              </button>
+              
+              <button id="theme-toggle" class="toolbar-button" title="Chế độ sáng/tối">
+                <i class="fas fa-moon"></i>
+              </button>
+              
+              <button id="download-pdf" class="toolbar-button" disabled>
+                <i class="fas fa-download"></i> Tải xuống
+              </button>
+            </div>
+          </div>
+          
+          <div id="pdf-container">
+            <div id="pdf-placeholder">
+              <i class="fas fa-file-pdf"></i>
+              <p>Chọn một tài liệu từ danh sách bên trái để xem</p>
+              <span class="placeholder-hint">Có thể cuộn chuột để phóng to (giữ phím Ctrl)</span>
+            </div>
+            <canvas id="pdf-viewer"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="document-stats section">
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-file-word"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="word-count">0</span>
+            <span class="stat-label">Tài liệu Word</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-file-excel"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="excel-count">0</span>
+            <span class="stat-label">Tài liệu Excel</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-file-powerpoint"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="powerpoint-count">0</span>
+            <span class="stat-label">Tài liệu PowerPoint</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-book-reader"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="total-count">0</span>
+            <span class="stat-label">Tổng số tài liệu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Trắc Nghiệm Tin Học</h3>
+        <p>Tài liệu học tập và thực hành cho các module tin học văn phòng</p>
+      </div>
+      <div class="footer-section">
+        <h3>Liên Kết</h3>
+        <ul>
+          <li><a href="index.html"><i class="fas fa-home"></i> Trang Chủ</a></li>
+          <li><a href="documents.html"><i class="fas fa-book"></i> Tài Liệu</a></li>
+          <li><a href="practice.html"><i class="fas fa-laptop-code"></i> Luyện Tập</a></li>
+          <li><a href="exams.html"><i class="fas fa-clipboard-check"></i> Thi Thử</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Trắc Nghiệm Tin Học</p>
+      <p><b>Design by PinkD</b></p>
+    </div>
+  </footer>
+
+  <!-- PDF.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script>
+    // Set worker path for PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+  </script>
+  
+  <!-- Custom scripts -->
+  <script src="js/pdf-viewer.js"></script>
+  <script src="js/document-browser.js"></script>
+  <script>
+    // Update document counts when data is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Toggle sidebar
+      const sidebarToggle = document.getElementById('toggle-sidebar');
+      const sidebar = document.querySelector('.document-sidebar');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+          sidebar.classList.toggle('expanded');
+        });
+      }
+      
+      // Theme toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      const pdfContainer = document.getElementById('pdf-container');
+      
+      if (themeToggle && pdfContainer) {
+        themeToggle.addEventListener('click', () => {
+          const icon = themeToggle.querySelector('i');
+          pdfContainer.classList.toggle('dark');
+          
+          if (icon) {
+            if (pdfContainer.classList.contains('dark')) {
+              icon.className = 'fas fa-sun';
+              themeToggle.title = 'Chế độ sáng';
+            } else {
+              icon.className = 'fas fa-moon';
+              themeToggle.title = 'Chế độ tối';
+            }
+          }
+        });
+      }
+      
+      // Document search
+      const searchInput = document.getElementById('document-search');
+      const clearSearch = document.getElementById('clear-search');
+      
+      if (searchInput && clearSearch) {
+        searchInput.addEventListener('input', function() {
+          const query = this.value.toLowerCase().trim();
+          const allDocItems = document.querySelectorAll('.document-item');
+          
+          allDocItems.forEach(item => {
+            const title = item.querySelector('.document-title').textContent.toLowerCase();
+            if (title.includes(query) || query === '') {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+          
+          clearSearch.style.display = query ? 'flex' : 'none';
+        });
+        
+        clearSearch.addEventListener('click', () => {
+          searchInput.value = '';
+          searchInput.dispatchEvent(new Event('input'));
+          searchInput.focus();
+        });
+      }
+    });
+    
+    // Update document count stats
+    function updateDocumentStats() {
+      setTimeout(() => {
+        const documents = window.QuizUtils?.getAvailableDocuments();
+        if (!documents) return;
+        
+        document.getElementById('word-count').textContent = documents.word?.length || 0;
+        document.getElementById('excel-count').textContent = documents.excel?.length || 0;
+        document.getElementById('powerpoint-count').textContent = documents.powerpoint?.length || 0;
+        
+        const total = (documents.word?.length || 0) + 
+                      (documents.excel?.length || 0) + 
+                      (documents.powerpoint?.length || 0);
+        document.getElementById('total-count').textContent = total;
+      }, 500);
+    }
+    
+    updateDocumentStats();
+  </script>
+</body>
+</html>

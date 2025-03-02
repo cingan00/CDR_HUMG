@@ -4,7 +4,7 @@
 
 ## Tính năng
 
-- Hỗ trợ nhiều module bài thi khác nhau (hiện có Module 1 và Module 2)
+- Hỗ trợ nhiều module bài thi khác nhau
 - Giao diện hiện đại, thân thiện với người dùng
 - Tương thích với các thiết bị di động
 - Tự động lưu tiến trình làm bài

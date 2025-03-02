@@ -49,3 +49,5 @@
 ## Mở rộng
 
 Để thêm các module mới, hãy cập nhật tệp questions.json với cấu trúc tương tự như các module hiện có.
+
+## Được thiết kế và phát triển bởi PinkD
